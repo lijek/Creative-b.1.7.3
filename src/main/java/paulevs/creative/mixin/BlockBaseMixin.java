@@ -28,17 +28,4 @@ public class BlockBaseMixin {
             }
         }
     }
-
-    /*@Inject(at = @At("INVOKE"), method = "getHardness(Lnet/minecraft/entity/player/PlayerBase;)F", cancellable = true)
-    private void creative_getHardness(PlayerBase arg, CallbackInfoReturnable<Float> cir){
-        System.out.println("wywolano gethardness");
-        if(arg instanceof CreativePlayer){
-            System.out.println("jest");
-            if(((CreativePlayer) arg).isCreative()){
-                System.out.println("tak");
-                cir.setReturnValue(Float.POSITIVE_INFINITY);
-                cir.cancel();
-            }
-        }
-    }*/
 }
