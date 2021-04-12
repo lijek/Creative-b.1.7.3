@@ -1,6 +1,5 @@
 package paulevs.creative.mixin;
 
-import net.minecraft.block.BlockBase;
 import net.minecraft.entity.EntityBase;
 import net.minecraft.entity.Living;
 import net.minecraft.entity.player.PlayerBase;
@@ -127,22 +126,6 @@ public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
 					this.velocityZ = 0;
 				}
 			}
-		}
-	}
-	
-	@Inject(method = "canRemoveBlock", at = @At("HEAD"), cancellable = true)
-	private void creative_canRemoveBlock(BlockBase block, CallbackInfoReturnable<Boolean> info) {
-		if (this.isCreative()) {
-			info.setReturnValue(true);
-			info.cancel();
-		}
-	}
-	
-	@Inject(method = "getStrengh", at = @At("HEAD"), cancellable = true)
-	private void creative_getStrengh(BlockBase block, CallbackInfoReturnable<Float> info) {
-		if (this.isCreative()) {
-			info.setReturnValue(Float.MAX_VALUE);
-			info.cancel();
 		}
 	}
 }

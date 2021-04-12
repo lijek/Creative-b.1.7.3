@@ -4,8 +4,8 @@
   "package": "paulevs.creative.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BlockBaseMixin",
-    "PlayerBaseMixin"
+    "PlayerBaseMixin",
+    "RemoteClientInteractionManagerMixin"
   ],
   "server": [],
   "client": [
