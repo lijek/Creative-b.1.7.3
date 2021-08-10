@@ -9,11 +9,9 @@ Requires **[Fabric Legacy](https://github.com/calmilamsy/Cursed-Fabric-MultiMC)*
 - Separate creative and survival worlds;
 - Modern-like creative GUI (based on beta 1.8 and current creative GUI);
 - Creative invulnerability;
-- Creative flight (pressing 'G' key);
-- Creative block breaking
-
-## Planned:
-- fix landing sound
+- Creative flight (double tap jump key);
+- Creative block breaking;
+- Middle click to get block you're looking on when in creative;
 
 ## How to install (MultiMC):
 - Download [MultiMC instance](https://github.com/calmilamsy/Cursed-Fabric-MultiMC) and import it as zip
@@ -23,13 +21,9 @@ Requires **[Fabric Legacy](https://github.com/calmilamsy/Cursed-Fabric-MultiMC)*
 ## Mod Api
 Creative has a possibility for mods to add their own tabs, the simple tab can be done like this:
 ```java
-TabRegister.EVENT.register(new TabRegister() {
-	@Override
-	public void registerTabs() {
-		SimpleTab tab = CreativeTabs.register(new SimpleTab("test", "coolmod", YOUR_ITEM_ICON));
-		tab.addItem(new ItemInstance(YOUR_ITEM_OR_BLOCK, 1, YOUR_META));
-	}
-});
+SimpleTab tab = CreativeTabs.register(new SimpleTab("test", "coolmod", YOUR_ITEM_ICON));
+tab.addItem(new ItemInstance(YOUR_ITEM_OR_BLOCK, 1, YOUR_META));
+CreativeTabs.register(tab);
 ```
 **Where:**
 - YOUR_ITEM_ICON is an ItemInstance for display as a tab icon;
