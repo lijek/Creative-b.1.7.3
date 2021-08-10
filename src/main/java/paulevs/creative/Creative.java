@@ -1,10 +1,13 @@
 package paulevs.creative;
 
-import net.modificationstation.stationloader.api.common.mod.StationMod;
+import net.modificationstation.stationapi.api.common.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.common.registry.ModID;
+import net.modificationstation.stationapi.api.common.util.Null;
 
-public class Creative implements StationMod {
-	public static final String MOD_ID = "creative";
-	
-	@Override
-	public void preInit() {}
+public class Creative {
+    @Entrypoint.Instance
+    public static final Creative INSTANCE = Null.get();
+
+    @Entrypoint.ModID
+    public static final ModID MODID = Null.get();
 }

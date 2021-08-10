@@ -1,19 +1,13 @@
 package paulevs.creative.api;
 
+import com.google.common.collect.Lists;
+import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.item.*;
+import net.modificationstation.stationapi.mixin.common.accessor.TranslationStorageAccessor;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-
-import com.google.common.collect.Lists;
-
-import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.item.Coal;
-import net.minecraft.item.ItemBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.item.Leaves;
-import net.minecraft.item.Log;
-import net.minecraft.item.Sapling;
-import net.modificationstation.stationloader.mixin.common.accessor.TranslationStorageAccessor;
 
 public abstract class CreativeTab implements Comparable<CreativeTab> {
 	private final List<ItemInstance> items = Lists.newArrayList();
@@ -51,7 +45,7 @@ public abstract class CreativeTab implements Comparable<CreativeTab> {
 	}
 	
 	public void addItemWithVariants(ItemBase item) {
-		if (item.getHasSubItems() && !item.hasDurability()) {
+		if (item.usesMeta() && !item.hasDurability()) {
 			Properties translations = ((TranslationStorageAccessor) TranslationStorage.getInstance()).getTranslations();
 			int maxMeta = 16;
 			if (item instanceof Coal) {

@@ -18,7 +18,8 @@ public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
 	private boolean isCreative;
 	private boolean flying;
 	private int jumpTicks;
-	
+	private float distanceWalkedModified;
+
 	public PlayerBaseMixin(Level arg) {
 		super(arg);
 	}
@@ -102,14 +103,22 @@ public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
 			this.velocityZ += (double) (f1 * f5 + f * f4) * speed;
 		}
 	}
+
+	@Inject(method = "tick", at = @At("HEAD"))
+	private void creative_tickStart(CallbackInfo ci){
+		distanceWalkedModified = this.field_1635;
+	}
 	
 	@Inject(method = "tick", at = @At("TAIL"))
-	private void creative_tick(CallbackInfo info) {
+	private void creative_tickEnd(CallbackInfo info) {
+
 		if (this.onGround || !this.isCreative()) {
 			this.setFlying(false);
 		}
 		if (this.isCreative()) {
 			if (this.isFlying() && !this.isSleeping()) {
+				this.field_1635 = distanceWalkedModified;
+
 				if (this.jumping) {
 					this.velocityY = 0.5;
 				}

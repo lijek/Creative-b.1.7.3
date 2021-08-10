@@ -18,7 +18,7 @@
 
 	"environment": "*",
 	"entrypoints": {
-		"stationmod": [
+		"stationapi:event_bus": [
 			"paulevs.creative.Creative"
 		]
 	},
@@ -29,6 +29,6 @@
 
 	"depends": {
 		"minecraft": "1.0.0-beta.7.3",
-		"stationloader": "1.3.*"
+		"stationapi": "*"
 	}
 }

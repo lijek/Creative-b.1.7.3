@@ -12,7 +12,6 @@
     "AbstractClientPlayerMixin",
     "ClientInteractionManagerMixin",
     "CreateLevelMixin",
-    "GameOptionsMixin",
     "MinecraftMixin",
     "PlayerInventoryMixin"
   ],

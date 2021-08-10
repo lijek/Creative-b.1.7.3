@@ -36,6 +36,7 @@ public class ClientInteractionManagerMixin  {
 		{
 			cir.setReturnValue(true);
 			cir.cancel();
+			return;
 		}
 
 		if (itemInstance == null)

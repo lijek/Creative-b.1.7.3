@@ -22,13 +22,15 @@ public abstract class RemoteClientInteractionManagerMixin extends ClientInteract
 
     private void creative_clickBlockCreative(int i, int j, int k, int i1){
         minecraft.level.method_172(minecraft.player, i, j, k, i1);
-        Level var5 = this.minecraft.level;
-        BlockBase var6 = BlockBase.BY_ID[var5.getTileId(i, j, k)];
-        var5.playLevelEvent(2001, i, j, k, var6.id + var5.getTileMeta(i, j, k) * 256);
-        int var7 = var5.getTileMeta(i, j, k);
-        boolean var8 = var5.setTile(i, j, k, 0);
-        if (var6 != null && var8) {
-            var6.method_1612(var5, i, j, k, var7);
+        Level level = this.minecraft.level;
+        BlockBase block = BlockBase.BY_ID[level.getTileId(i, j, k)];
+        if(block == null)
+            return;
+        level.playLevelEvent(2001, i, j, k, block.id + level.getTileMeta(i, j, k) * 256);
+        int meta = level.getTileMeta(i, j, k);
+        boolean var8 = level.setTile(i, j, k, 0);
+        if (block != null && var8) {
+            block.activate(level, i, j, k, meta);
         }
     }
 
