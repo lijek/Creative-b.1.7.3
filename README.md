@@ -3,7 +3,7 @@
 
 This mod adds a creative mode from modern MC versions to beta 1.7.3.
 
-Requires **[Fabric Legacy](https://github.com/calmilamsy/Cursed-Fabric-MultiMC)** and **[Station API](https://github.com/ModificationStation/StationAPI)** (>= 1.3)
+Requires **[Fabric Legacy](https://github.com/calmilamsy/Cursed-Fabric-MultiMC)** and **[Station API](https://github.com/ModificationStation/StationAPI)** (2.0-PRE1 or newer)
 
 ## Features:
 - Separate creative and survival worlds;
