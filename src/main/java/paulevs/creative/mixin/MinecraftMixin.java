@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import paulevs.creative.CreativePlayer;
 import paulevs.creative.api.CreativeTabs;
 
 @Mixin(Minecraft.class)
@@ -27,35 +28,49 @@ public class MinecraftMixin {
 		CreativeTabs.initTabs();
 	}
 
-	@Inject(method = "method_2103", at = @At("HEAD"))
+	@Inject(method = "method_2103", at = @At("HEAD"), cancellable = true)
 	private void creative_clickMiddleMouseButton(CallbackInfo ci){
-		ItemInstance newItem = creative_getItemFromHitResult();
-		player.inventory.main[player.inventory.selectedHotbarSlot] = newItem;
+		if(((CreativePlayer)player).isCreative()) {
+			int targetSlot = -1;
+			ItemInstance newItem = creative_getItemFromHitResult();
+			if(newItem == null) {
+				ci.cancel();
+				return;
+			}
+			for(int i = 0; i < 9; i++) {
+				if (player.inventory.main[i] == null) {
+					if(targetSlot == -1)
+						targetSlot = i;
+					continue;
+				}
+				ItemInstance item = player.inventory.main[i];
+				if (item.itemId == newItem.itemId && item.getDamage() == newItem.getDamage()) {
+					player.inventory.selectedHotbarSlot = i;
+					ci.cancel();
+					return;
+				}
+			}
+			if(targetSlot == -1)
+				targetSlot = player.inventory.selectedHotbarSlot;
+			player.inventory.selectedHotbarSlot = targetSlot;
+			player.inventory.main[targetSlot] = newItem;
+			ci.cancel();
+		}
 	}
 
 	private ItemInstance creative_getItemFromHitResult(){
 		int blockID, meta;
 		if(hitResult != null) {
 			blockID = level.getTileId(this.hitResult.x, this.hitResult.y, this.hitResult.z);
-
-			if (blockID == BlockBase.GRASS.id) {
-				blockID = BlockBase.DIRT.id;
-			}
-
-			if (blockID == BlockBase.DOUBLE_STONE_SLAB.id) {
-				blockID = BlockBase.STONE_SLAB.id;
-			}
-
-			if (blockID == BlockBase.BEDROCK.id) {
-				blockID = BlockBase.STONE.id;
-			}
+			meta = ((BlockBaseInvoker)BlockBase.BY_ID[blockID]).droppedMetaInvoker(level.getTileMeta(this.hitResult.x, this.hitResult.y, this.hitResult.z));
 		}else{
 			blockID = 0;
+			meta = 0;
 		}
 
 		if(blockID == 0)
 			return null;
 		else
-			return new ItemInstance(blockID, 1, 0);
+			return new ItemInstance(blockID, 1, meta);
 	}
 }

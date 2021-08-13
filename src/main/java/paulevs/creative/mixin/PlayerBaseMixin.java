@@ -120,13 +120,11 @@ public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
 				this.field_1635 = distanceWalkedModified;
 
 				if (this.jumping) {
-					this.velocityY = 0.5;
+					this.velocityY += 0.15D;
 				}
-				else if (this.method_1373()) {
-					this.velocityY = -0.5;
+				if (this.method_1373()) {
+					this.velocityY -= 0.15D;
 				}
-				else
-					this.velocityY = 0;
 				
 				if (this.onGround) {
 					this.setFlying(false);
@@ -135,6 +133,16 @@ public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
 					this.velocityZ = 0;
 				}
 			}
+		}
+	}
+
+	@Inject(method = "travel", at = @At("HEAD"), cancellable = true)
+	private void creative_travel(float f, float f1, CallbackInfo ci){
+		if(((CreativePlayer)this).isFlying()){
+			double velocity = this.velocityY;
+			super.travel(f, f1);
+			this.velocityY = velocity * 0.6D;
+			ci.cancel();
 		}
 	}
 }

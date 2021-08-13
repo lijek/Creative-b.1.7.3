@@ -3,17 +3,23 @@
   "minVersion": "0.8",
   "package": "paulevs.creative.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "PlayerBaseMixin",
-    "RemoteClientInteractionManagerMixin"
-  ],
+  "mixins": [],
   "server": [],
   "client": [
     "AbstractClientPlayerMixin",
+    "BlockBaseInvoker",
+    "BucketMixin",
     "ClientInteractionManagerMixin",
+    "ContainerBaseMixin",
     "CreateLevelMixin",
+    "GhastMixin",
     "MinecraftMixin",
-    "PlayerInventoryMixin"
+    "MonsterBaseMixin",
+    "PlayerBaseMixin",
+    "PlayerInventoryMixin",
+    "RemoteClientInteractionManagerMixin",
+    "SpiderMixin",
+    "LivingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

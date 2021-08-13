@@ -36,58 +36,6 @@ public abstract class AbstractClientPlayerMixin extends PlayerBase {
 			info.cancel();
 		}
 	}
-	
-	@Inject(method = "method_136", at = @At("HEAD"), cancellable = true)
-	public void creative_onKeyPress(int i, boolean flag, CallbackInfo info) {
-		CreativePlayer player = (CreativePlayer) this;
-		if (player.isCreative()) {
-			/*boolean keyPressed = flag && i == minecraft.options.jumpKey.key;
-
-			if(!keyEnabled){
-				if(!moveKeyPressed && keyPressed){
-					long now = System.currentTimeMillis();
-
-					if(now > startTime + 300){
-						startTime = now;
-					}else{
-						keyEnabled = true;
-						boolean fly = !player.isFlying();
-						player.setFlying(fly);
-						if (fly) {
-							AbstractClientPlayer client = (AbstractClientPlayer) (Object) this;
-							client.setPositionAndAngles(client.x, client.y - client.standingEyeHeight + 0.01, client.z, client.yaw, client.pitch);
-							client.velocityY = client.velocityY * 0.6D;
-						}
-						//info.cancel();
-					}
-
-					moveKeyPressed = true;
-				}else{ // optional
-					if(!moveKeyPressed && keyPressed && System.currentTimeMillis() > startTime + 300){
-						keyEnabled = false;
-						// do stuff to cancel double tap action if key is pressed again...
-						// useful if you need to allow the player to override the keypress and cancel the double tap action
-					}
-				}
-
-				// detect key release
-				if(!keyPressed){
-					moveKeyPressed = false;
-				}
-			}*/
-
-			/*if (flag && i == ((FlyOption) minecraft.options).getFlyKey().key) {
-				boolean fly = !player.isFlying();
-				player.setFlying(fly);
-				if (fly) {
-					AbstractClientPlayer client = (AbstractClientPlayer) (Object) this;
-					client.setPositionAndAngles(client.x, client.y - client.standingEyeHeight + 0.01, client.z, client.yaw, client.pitch);
-					client.velocityY = client.velocityY * 0.6D;
-				}
-				info.cancel();
-			}*/
-		}
-	}
 
 	@Inject(method = "updateDespawnCounter", at = @At("TAIL"))
 	private void creative_livingUpdate(CallbackInfo ci){

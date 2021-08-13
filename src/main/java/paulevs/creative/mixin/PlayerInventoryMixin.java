@@ -384,12 +384,14 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
             if (tabX >= 0 && tabX < 25 && tabY >= 0 && tabY < 24) {
                 normalGUI = false;
                 creative_playSound();
+                return;
             }
 
             tabY = mouseY - posY - 138;
             if (tabX >= 0 && tabX < 25 && tabY >= 0 && tabY < 24) {
                 normalGUI = true;
                 creative_playSound();
+                return;
             }
 
             if (normalGUI) {

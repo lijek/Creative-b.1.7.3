@@ -10,8 +10,11 @@ Requires **[Fabric Legacy](https://github.com/calmilamsy/Cursed-Fabric-MultiMC)*
 - Modern-like creative GUI (based on beta 1.8 and current creative GUI);
 - Creative invulnerability;
 - Creative flight (double tap jump key);
-- Creative block breaking;
+- Ability to break any block when in creative;
 - Middle click to get block you're looking on when in creative;
+- Mobs don't attack you until you attack them;
+- Copying item stacks by mouse scroll clicking;
+- Buckets will not empty or fill when placing or collecting a fluid
 
 ## How to install (MultiMC):
 - Download [MultiMC instance](https://github.com/calmilamsy/Cursed-Fabric-MultiMC) and import it as zip
