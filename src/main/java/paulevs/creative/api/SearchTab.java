@@ -33,6 +33,7 @@ public class SearchTab extends SimpleTab {
             filteredItems = getItems();
             return;
         }
+        filter = filter.toLowerCase(Locale.ROOT);
         filteredItems = Lists.newArrayList();
         for (ItemInstance item : getItems()) {
             if((TranslationStorage.getInstance().method_995(item.getTranslationKey())).trim().toLowerCase(Locale.ROOT).contains(filter)){
