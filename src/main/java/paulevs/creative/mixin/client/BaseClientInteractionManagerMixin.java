@@ -1,7 +1,7 @@
 package paulevs.creative.mixin.client;
 
 import net.minecraft.block.BlockBase;
-import net.minecraft.client.ClientInteractionManager;
+import net.minecraft.client.BaseClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerBase;
 import net.minecraft.item.ItemInstance;
@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import paulevs.creative.CreativePlayer;
 
-@Mixin(ClientInteractionManager.class)
-public class ClientInteractionManagerMixin  {
+@Mixin(BaseClientInteractionManager.class)
+public class BaseClientInteractionManagerMixin  {
 	@Final
 	@Shadow
 	protected Minecraft minecraft;

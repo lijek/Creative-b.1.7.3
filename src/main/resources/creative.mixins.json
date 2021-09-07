@@ -20,7 +20,7 @@
     "client.ClientInteractionManagerMixin",
     "client.MinecraftMixin",
     "client.PlayerInventoryMixin",
-    "client.RemoteClientInteractionManagerMixin"
+    "client.SinglePlayerClientInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,19 +1,18 @@
 buildscript {
     repositories {
+        mavenCentral()
+        jcenter()
         maven {
             name = "Fabric"
             url = "https://maven.fabricmc.net/"
         }
-        gradlePluginPortal()
-        mavenCentral()
-        jcenter()
         maven {
             name = "Jitpack"
             url 'https://jitpack.io/'
         }
     }
     dependencies {
-        classpath 'com.github.Chocohead:Fabric-Loom:9b38aba'
+        classpath 'com.github.Chocohead:Fabric-Loom:e3d1762'
     }
 }
 
@@ -47,7 +46,6 @@ repositories {
         name = "Jitpack"
         url "https://jitpack.io/"
     }
-    maven { url "https://maven.glass-launcher.net/repo" }
 }
 
 minecraft {
@@ -76,7 +74,7 @@ dependencies {
     // to change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-    mappings loom.fromCommit("calmilamsy/BIN-Mappings", "${project.yarn_mappings}") { spec ->
+    mappings loom.fromCommit("calmilamsy/BIN-Mappings", "${project.yarn_mappings}") {spec ->
         spec.version = "b1.7.3-${project.yarn_mappings}"
     }
 
@@ -89,23 +87,7 @@ dependencies {
     compile 'org.jetbrains:annotations:16.0.2'
 
     modImplementation "com.github.minecraft-cursed-legacy:cursed-fabric-loader:${project.loader_version}"
-    //modImplementation "net.modificationstation:StationLoader:1.3.1:dev"
-
-    def urlFile = { url, name ->
-        File file = new File("$buildDir/download/${name}.jar")
-        file.parentFile.mkdirs()
-        if (!file.exists()) {
-            new URL(url).withInputStream { downloadStream ->
-                file.withOutputStream { fileOut ->
-                    fileOut << downloadStream
-                }
-            }
-        }
-        files(file.absolutePath)
-    }
-    modImplementation 'com.github.ModificationStation:StationAPI:777f95fe9d'
-    //compile urlFile("http://glass-launcher.net:8080/job/StationAPI/lastSuccessfulBuild/artifact/build/libs/StationAPI-2.0-PRE1-dev.jar", "StationAPI")
-
+    modImplementation 'com.github.ModificationStation:StationAPI:2df140d'
 }
 
 processResources {
@@ -151,14 +133,21 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId project.archives_base_name
-            artifact("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
+            artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
                 classifier null
                 builtBy remapJar
             }
 
-            artifact("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
+            artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
                 classifier 'dev'
                 builtBy remapJar
+            }
+            pom.withXml {
+                asNode().dependencies.dependency.each { dep ->
+                    if(dep.artifactId.last().value().last().toLowerCase() in ["cursed-fabric-loader", "stationapi"]) {
+                        assert dep.parent().remove(dep)
+                    }
+                }
             }
         }
     }

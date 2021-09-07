@@ -1,9 +1,9 @@
 package paulevs.creative.mixin.client;
 
 import net.minecraft.block.BlockBase;
-import net.minecraft.client.ClientInteractionManager;
+import net.minecraft.client.BaseClientInteractionManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.RemoteClientInteractionManager;
+import net.minecraft.client.SinglePlayerClientInteractionManager;
 import net.minecraft.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import paulevs.creative.CreativePlayer;
 
-@Mixin(RemoteClientInteractionManager.class)
-public abstract class RemoteClientInteractionManagerMixin extends ClientInteractionManager {
+@Mixin(SinglePlayerClientInteractionManager.class)
+public abstract class SinglePlayerClientInteractionManagerMixin extends BaseClientInteractionManager {
 
     private int blocksToRemove = 0;
 
-    public RemoteClientInteractionManagerMixin(Minecraft minecraft) {
+    public SinglePlayerClientInteractionManagerMixin(Minecraft minecraft) {
         super(minecraft);
     }
 
