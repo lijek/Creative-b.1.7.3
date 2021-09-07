@@ -1,4 +1,4 @@
-package paulevs.creative.mixin;
+package paulevs.creative.mixin.client;
 
 import net.minecraft.block.BlockBase;
 import net.minecraft.client.ClientInteractionManager;

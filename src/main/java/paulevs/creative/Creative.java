@@ -1,8 +1,8 @@
 package paulevs.creative;
 
-import net.modificationstation.stationapi.api.common.mod.entrypoint.Entrypoint;
-import net.modificationstation.stationapi.api.common.registry.ModID;
-import net.modificationstation.stationapi.api.common.util.Null;
+import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Null;
 
 public class Creative {
     @Entrypoint.Instance

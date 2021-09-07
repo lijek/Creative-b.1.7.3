@@ -3,7 +3,7 @@ package paulevs.creative.api;
 import com.google.common.collect.Lists;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.*;
-import net.modificationstation.stationapi.mixin.common.accessor.TranslationStorageAccessor;
+import net.modificationstation.stationapi.mixin.lang.TranslationStorageAccessor;
 
 import java.util.List;
 import java.util.Locale;

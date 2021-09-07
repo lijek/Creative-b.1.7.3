@@ -13,7 +13,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.Chocohead:Fabric-Loom:66ed9fe'
+        classpath 'com.github.Chocohead:Fabric-Loom:9b38aba'
     }
 }
 
@@ -70,7 +70,7 @@ dependencies {
     implementation 'org.ow2.asm:asm-util:9.0'
 
     implementation "com.github.jhalterman:typetools:87240d6"
-    implementation "com.github.benjiman:expressions:7ed6748"
+    implementation "com.github.mineLdiver:expressions:2fa66db"
     implementation "com.github.mineLdiver:UnsafeEvents:7efec57"
 
     // to change the versions see the gradle.properties file
@@ -103,7 +103,8 @@ dependencies {
         }
         files(file.absolutePath)
     }
-    compile urlFile("http://glass-launcher.net:8080/job/StationAPI/lastSuccessfulBuild/artifact/build/libs/StationAPI-2.0-PRE1-dev.jar", "StationAPI")
+    modImplementation 'com.github.ModificationStation:StationAPI:777f95fe9d'
+    //compile urlFile("http://glass-launcher.net:8080/job/StationAPI/lastSuccessfulBuild/artifact/build/libs/StationAPI-2.0-PRE1-dev.jar", "StationAPI")
 
 }
 

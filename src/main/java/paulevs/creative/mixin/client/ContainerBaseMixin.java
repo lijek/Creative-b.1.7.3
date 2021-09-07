@@ -1,4 +1,4 @@
-package paulevs.creative.mixin;
+package paulevs.creative.mixin.client;
 
 import net.minecraft.client.gui.screen.ScreenBase;
 import net.minecraft.client.gui.screen.container.ContainerBase;
