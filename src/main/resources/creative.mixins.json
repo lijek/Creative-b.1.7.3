@@ -7,20 +7,23 @@
     "BlockBaseInvoker",
     "BucketMixin",
     "GhastMixin",
+    "LivingMixin",
     "MonsterBaseMixin",
     "PlayerBaseMixin",
-    "SpiderMixin",
-    "LivingMixin"
+    "SpiderMixin"
   ],
-  "server": [],
+  "server": [
+    "server.ServerPlayerPacketHandlerMixin"
+  ],
   "client": [
     "client.AbstractClientPlayerMixin",
     "client.ContainerBaseMixin",
     "client.CreateLevelMixin",
-    "client.ClientInteractionManagerMixin",
     "client.MinecraftMixin",
     "client.PlayerInventoryMixin",
-    "client.SinglePlayerClientInteractionManagerMixin"
+    "client.BaseClientInteractionManagerMixin",
+    "client.SinglePlayerClientInteractionManagerMixin",
+    "client.MultiPlayerClientInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

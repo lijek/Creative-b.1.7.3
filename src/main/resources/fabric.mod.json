@@ -19,7 +19,14 @@
 	"environment": "*",
 	"entrypoints": {
 		"stationapi:event_bus": [
-			"paulevs.creative.Creative"
+			"paulevs.creative.Creative",
+			"paulevs.creative.listeners.MessageListenerListener"
+		],
+		"stationapi:event_bus_client": [
+
+		],
+		"stationapi:event_bus_server": [
+			"paulevs.creative.listeners.ServerPlayerInfoSender"
 		]
 	},
 

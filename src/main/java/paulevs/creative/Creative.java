@@ -10,4 +10,7 @@ public class Creative {
 
     @Entrypoint.ModID
     public static final ModID MODID = Null.get();
+
+    public static final String infoPacketID = "playerInfo";
+    public static final String toggleFlyPacketID = "toggleFly";
 }

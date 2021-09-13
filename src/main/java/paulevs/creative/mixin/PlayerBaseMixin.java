@@ -7,6 +7,7 @@ import net.minecraft.level.Level;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.util.maths.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,6 +16,7 @@ import paulevs.creative.CreativePlayer;
 
 @Mixin(PlayerBase.class)
 public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
+	@Shadow public String name;
 	private boolean isCreative;
 	private boolean flying;
 	private int jumpTicks;
@@ -38,12 +40,12 @@ public abstract class PlayerBaseMixin extends Living implements CreativePlayer {
 	public boolean isFlying() {
 		return flying;
 	}
-	
+
 	@Override
 	public void setFlying(boolean flying) {
 		this.flying = flying;
 	}
-	
+
 	@Override
 	public int getJumpTicks() {
 		return jumpTicks;

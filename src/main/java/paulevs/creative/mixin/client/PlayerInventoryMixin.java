@@ -5,11 +5,12 @@ import net.minecraft.client.gui.screen.container.ContainerBase;
 import net.minecraft.client.gui.screen.container.PlayerInventory;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.player.PlayerBase;
 import net.minecraft.item.ItemBase;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.util.maths.MathHelper;
+import net.modificationstation.stationapi.api.StationAPI;
+import net.modificationstation.stationapi.api.client.event.gui.TooltipRenderEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -39,6 +40,9 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
     private String selected;
     private int rowIndex;
     private int maxIndex;
+    private int containerX;
+    private int containerY;
+    private float delta;
     private float slider;
     private boolean drag;
     private int tabIndex;
@@ -68,6 +72,8 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
         rowIndex = 0;
         tabIndex = 0;
         tabPage = 0;
+        containerX = (this.width - this.containerWidth) / 2;
+        containerY = (this.height - this.containerHeight) / 2;
         creativeIcon = new ItemInstance(ItemBase.diamond);
         survivalIcon = new ItemInstance(BlockBase.WORKBENCH);
     }
@@ -279,8 +285,7 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
             return;
         }
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        String name = ("" + TranslationStorage.getInstance().method_995(item.getTranslationKey())).trim();
-        creative_renderString(name);
+        StationAPI.EVENT_BUS.post(new TooltipRenderEvent(item, (ContainerBase) (Object) this, textManager, 0, 0, (int) mouseX, (int) mouseY, delta, false));
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
@@ -366,6 +371,7 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
 
             this.mouseX = (float) mouseX;
             this.mouseY = (float) mouseY;
+            this.delta = delta;
             info.cancel();
         }
     }
