@@ -1,11 +1,11 @@
 buildscript {
     repositories {
-        mavenCentral()
-        jcenter()
         maven {
             name = "Fabric"
             url = "https://maven.fabricmc.net/"
         }
+        mavenCentral()
+        jcenter()
         maven {
             name = "Jitpack"
             url 'https://jitpack.io/'
