@@ -5,12 +5,16 @@ import net.minecraft.client.gui.screen.container.ContainerBase;
 import net.minecraft.client.gui.screen.container.PlayerInventory;
 import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.entity.ItemRenderer;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.player.PlayerBase;
 import net.minecraft.item.ItemBase;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.util.maths.MathHelper;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.client.event.gui.TooltipRenderEvent;
+import net.modificationstation.stationapi.api.client.gui.CustomTooltipProvider;
+import net.modificationstation.stationapi.api.packet.Message;
+import net.modificationstation.stationapi.api.packet.PacketHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -19,20 +23,22 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import paulevs.creative.Creative;
 import paulevs.creative.CreativePlayer;
-import paulevs.creative.MHelper;
-import paulevs.creative.SearchTextbox;
+import paulevs.creative.Utility;
 import paulevs.creative.api.CreativeTab;
 import paulevs.creative.api.CreativeTabs;
 import paulevs.creative.api.SearchTab;
+import paulevs.creative.gui.SearchTextbox;
 
 import java.util.List;
 
 @Mixin(PlayerInventory.class)
 public abstract class PlayerInventoryMixin extends ContainerBase {
-    private static final int COLOR_FILLER = MHelper.getColor(198, 198, 198, 128);
+    private static final int COLOR_FILLER = Utility.getColor(198, 198, 198, 128);
 
     private static final ItemRenderer itemRenderer = new ItemRenderer();
+    public CreativeTab creative_tab;
     private SearchTextbox search;
     private List<ItemInstance> items;
     private boolean normalGUI;
@@ -47,20 +53,18 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
     private boolean drag;
     private int tabIndex;
     private int tabPage;
-
     private ItemInstance creativeIcon;
     private ItemInstance survivalIcon;
-
-    public PlayerInventoryMixin(net.minecraft.container.ContainerBase container) {
-        super(container);
-    }
-
     @Shadow
     private float mouseX;
     @Shadow
     private float mouseY;
 
-    public CreativeTab creative_tab;
+    @Shadow public abstract void init();
+
+    public PlayerInventoryMixin(net.minecraft.container.ContainerBase container) {
+        super(container);
+    }
 
     @Inject(method = "<init>*", at = @At("TAIL"))
     private void creative_initPlayerInventory(PlayerBase player, CallbackInfo info) {
@@ -79,9 +83,10 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
     }
 
     @Inject(method = "init", at = @At("TAIL"))
-    private void creative_init(CallbackInfo ci){
+    private void creative_init(CallbackInfo ci) {
         Keyboard.enableRepeatEvents(true);
-        search = new SearchTextbox(this, this.textManager, ((this.width - this.containerWidth) / 2) + 7, ((this.height - this.containerHeight) / 2) + 14, 90, 12);
+        search = new SearchTextbox(this, this.textManager, ((this.width - this.containerWidth) / 2) + 7,
+                                   ((this.height - this.containerHeight) / 2) + 14, 90, 12);
         search.setSelected(true);
         search.setMaxLength(128);
 
@@ -91,16 +96,16 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
     }
 
     @Override
-    public void onClose(){
+    public void onClose() {
         Keyboard.enableRepeatEvents(false);
         super.onClose();
     }
 
     @Override
-    protected void keyPressed(char character, int key){
+    protected void keyPressed(char character, int key) {
         search.keyPressed(character, key);
         CreativeTab tab = CreativeTabs.getTab(tabPage, tabIndex);
-        if(tab instanceof SearchTab) {
+        if (tab instanceof SearchTab) {
             ((SearchTab) tab).setFilter(search.getText());
             items = creative_getTabItems(tab);
         }
@@ -153,7 +158,8 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
             creative_tab = CreativeTabs.getTab(tabPage, tabIndex);
 
             if (creative_tab instanceof SearchTab)
-                texture = this.minecraft.textureManager.getTextureId("/assets/creative/textures/gui/creative_list_searchbar.png");
+                texture = this.minecraft.textureManager.getTextureId(
+                        "/assets/creative/textures/gui/creative_list_searchbar.png");
             else
                 texture = this.minecraft.textureManager.getTextureId("/assets/creative/textures/gui/creative_list.png");
 
@@ -173,7 +179,8 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
                 }
 
                 this.blit(posX + 173, posY + 138, 176, 32, 25, 24);
-                this.blit(posX, posY, 0, 0, this.containerWidth, this.containerHeight + ((creative_tab instanceof SearchTab) ? 16 : 0));
+                this.blit(posX, posY, 0, 0, this.containerWidth,
+                          this.containerHeight + ((creative_tab instanceof SearchTab) ? 16 : 0));
                 this.blit(posX + 173, posY + 114, 176, 32, 25, 24);
 
                 this.blit(posX + 150, posY + 4, 208, 0, 9, 8);
@@ -212,7 +219,7 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
                     creative_renderItem(tab.getIcon(), posX + 8 + i * 24, posY - 17);
                 }
 
-                if(creative_tab instanceof SearchTab)
+                if (creative_tab instanceof SearchTab)
                     search.draw();
 
                 posY += ((creative_tab instanceof SearchTab) ? 16 : 0);
@@ -285,7 +292,13 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
             return;
         }
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        StationAPI.EVENT_BUS.post(new TooltipRenderEvent(item, (ContainerBase) (Object) this, textManager, 0, 0, (int) mouseX, (int) mouseY, delta, false));
+        String name = ("" + TranslationStorage.getInstance().method_995(item.getTranslationKey())).trim();
+        if(item.getType() instanceof CustomTooltipProvider){
+            StationAPI.EVENT_BUS.post(
+                    new TooltipRenderEvent(item, this, textManager, minecraft.player.inventory, containerX, containerY, (int) mouseX,
+                                           (int) mouseY, delta, name));
+        }else
+            creative_renderString(name);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
@@ -355,8 +368,10 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
             net.minecraft.entity.player.PlayerInventory inventory = this.minecraft.player.inventory;
             if (inventory.getCursorItem() != null) {
                 GL11.glTranslatef(0.0F, 0.0F, 32.0F);
-                itemRenderer.method_1487(this.textManager, this.minecraft.textureManager, inventory.getCursorItem(), mouseX - posX - 8, mouseY - posY - 8);
-                itemRenderer.method_1488(this.textManager, this.minecraft.textureManager, inventory.getCursorItem(), mouseX - posX - 8, mouseY - posY - 8);
+                itemRenderer.method_1487(this.textManager, this.minecraft.textureManager, inventory.getCursorItem(),
+                                         mouseX - posX - 8, mouseY - posY - 8);
+                itemRenderer.method_1488(this.textManager, this.minecraft.textureManager, inventory.getCursorItem(),
+                                         mouseX - posX - 8, mouseY - posY - 8);
             }
 
             GL11.glDisable(32826);
@@ -379,7 +394,7 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (creative_isInCreative()) {
-            if(CreativeTabs.getTab(tabPage, tabIndex) instanceof SearchTab)
+            if (CreativeTabs.getTab(tabPage, tabIndex) instanceof SearchTab)
                 search.mouseClicked(mouseX, mouseY, button);
 
             int posX = (this.width - this.containerWidth) / 2;
@@ -478,29 +493,16 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
 
             net.minecraft.entity.player.PlayerInventory inventory = this.minecraft.player.inventory;
             if (slotY >= 0 && slotY < 7 && slotX >= 0 && slotX < 8) {
+                ItemInstance item = new ItemInstance(1, 0, 0);
                 int index = slotY * 8 + slotX + rowIndex;
-                if (index < items.size()) {
-                    ItemInstance item = items.get(index);
-                    boolean isSame = inventory.getCursorItem() != null && inventory.getCursorItem().isDamageAndIDIdentical(item);
-                    if (inventory.getCursorItem() == null || ItemBase.byId[inventory.getCursorItem().itemId] == null || isSame) {
-                        if (item != null) {
-                            if (isSame) {
-                                inventory.getCursorItem().count++;
-                            } else {
-                                inventory.setCursorItem(item.copy());
-                            }
-                            if (button == 2) {
-                                inventory.getCursorItem().count = ItemBase.byId[inventory.getCursorItem().itemId].getMaxStackSize();
-                            }
-                            return;
-                        }
-                    }
-                }
-                if (button == 1 && inventory.getCursorItem().count > 1) {
-                    inventory.getCursorItem().count--;
-                } else {
-                    inventory.setCursorItem(null);
-                }
+                boolean itemIsValid = index < items.size();
+                item = itemIsValid ? items.get(index).copy() : item;
+
+                Message message = new Message(Creative.inventoryClickPacket);
+                message.ints = new int[]{item.itemId, item.count, item.getDamage(), button};
+                message.booleans = new boolean[]{itemIsValid};
+                PacketHelper.send(message);
+
                 return;
             }
 
@@ -511,11 +513,9 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
                 if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                     inventory.main[slotX] = null;
                 }
-                super.mouseClicked(mouseX, mouseY, button);
             }
-        } else {
-            super.mouseClicked(mouseX, mouseY, button);
         }
+        super.mouseClicked(mouseX, mouseY, button);
 
     }
 
@@ -558,9 +558,9 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
         }
     }
 
-    private List<ItemInstance> creative_getTabItems(CreativeTab tab){
-        if(tab instanceof SearchTab)
-            return ((SearchTab)tab).getFilteredItems();
+    private List<ItemInstance> creative_getTabItems(CreativeTab tab) {
+        if (tab instanceof SearchTab)
+            return ((SearchTab) tab).getFilteredItems();
         else
             return tab.getItems();
     }

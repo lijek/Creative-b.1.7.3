@@ -24,7 +24,4 @@ public class ServerPlayerPacketHandlerMixin {
     }
 
 
-    private void creative_playerDigging(){
-
-    }
 }

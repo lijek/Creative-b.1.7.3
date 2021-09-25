@@ -20,7 +20,7 @@
 	"entrypoints": {
 		"stationapi:event_bus": [
 			"paulevs.creative.Creative",
-			"paulevs.creative.listeners.MessageListenerListener"
+			"paulevs.creative.listeners.MessageListener"
 		],
 		"stationapi:event_bus_client": [
 

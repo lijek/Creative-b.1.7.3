@@ -5,12 +5,15 @@ import net.minecraft.client.PlayerKeypressManager;
 import net.minecraft.entity.player.AbstractClientPlayer;
 import net.minecraft.entity.player.PlayerBase;
 import net.minecraft.level.Level;
+import net.modificationstation.stationapi.api.packet.Message;
+import net.modificationstation.stationapi.api.packet.PacketHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import paulevs.creative.Creative;
 import paulevs.creative.CreativePlayer;
 
 @Mixin(AbstractClientPlayer.class)
@@ -52,6 +55,9 @@ public abstract class AbstractClientPlayerMixin extends PlayerBase {
 			else{
 				boolean fly = !player.isFlying();
 				player.setFlying(fly);
+				Message message = new Message(Creative.toggleFlyPacket);
+				message.booleans = new boolean[]{player.isFlying()};
+				PacketHelper.send(message);
 				creative_FlyToggleTimer = 0;
 			}
 		}

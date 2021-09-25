@@ -1,4 +1,4 @@
-package paulevs.creative;
+package paulevs.creative.gui;
 
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ScreenBase;

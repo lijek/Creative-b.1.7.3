@@ -4,8 +4,6 @@ import net.minecraft.block.BlockBase;
 import net.minecraft.client.BaseClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MultiPlayerClientInteractionManager;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemInstance;
 import net.minecraft.level.Level;
 import net.minecraft.network.ClientPlayNetworkHandler;
 import net.minecraft.packet.play.PlayerDigging0xEC2SPacket;
@@ -14,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import paulevs.creative.CreativePlayer;
 
 @Mixin(MultiPlayerClientInteractionManager.class)
@@ -45,8 +42,8 @@ public class MultiPlayerClientInteractionManagerMixin extends BaseClientInteract
     private void creative_clickBlock(int i, int j, int k, int i1, CallbackInfo ci){
         if(!((CreativePlayer)minecraft.player).isCreative())
             return;
-        this.networkHandler.sendPacket(new PlayerDigging0xEC2SPacket(0, i, j, k, i1));
         creative_clickBlockCreative(i, j, k, i1);
+        this.networkHandler.sendPacket(new PlayerDigging0xEC2SPacket(0, i, j, k, i1));
         blocksToRemove = 5;
         ci.cancel();
     }
@@ -65,7 +62,7 @@ public class MultiPlayerClientInteractionManagerMixin extends BaseClientInteract
         ci.cancel();
     }
 
-    @Inject(method = "method_1713", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "method_1713", at = @At("HEAD"), cancellable = true)
     private void creative_placeBlock(PlayerBase arg, Level arg1, ItemInstance item, int i, int j, int k, int i1, CallbackInfoReturnable<Boolean> cir){
         if(!((CreativePlayer) arg).isCreative())
             return;
@@ -77,5 +74,5 @@ public class MultiPlayerClientInteractionManagerMixin extends BaseClientInteract
             item.setDamage(damage);
             cir.cancel();
         }
-    }
+    }*/
 }

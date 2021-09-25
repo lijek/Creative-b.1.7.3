@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockBaseInvoker",
+    "BlockBaseMixin",
     "BucketMixin",
     "GhastMixin",
     "LivingMixin",
@@ -13,17 +14,18 @@
     "SpiderMixin"
   ],
   "server": [
-    "server.ServerPlayerPacketHandlerMixin"
+    "server.ServerPlayerPacketHandlerMixin",
+    "server.class_70Mixin"
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
+    "client.BaseClientInteractionManagerMixin",
     "client.ContainerBaseMixin",
     "client.CreateLevelMixin",
     "client.MinecraftMixin",
+    "client.MultiPlayerClientInteractionManagerMixin",
     "client.PlayerInventoryMixin",
-    "client.BaseClientInteractionManagerMixin",
-    "client.SinglePlayerClientInteractionManagerMixin",
-    "client.MultiPlayerClientInteractionManagerMixin"
+    "client.SinglePlayerClientInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
