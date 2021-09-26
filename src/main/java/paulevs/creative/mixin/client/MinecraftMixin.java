@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import paulevs.creative.CreativePlayer;
+import paulevs.creative.Utility;
 import paulevs.creative.api.CreativeTabs;
 import paulevs.creative.api.event.TabRegisterEvent;
 import paulevs.creative.mixin.BlockBaseInvoker;
@@ -30,6 +31,7 @@ public class MinecraftMixin {
 		CreativeTabs.initVanilla();
 		StationAPI.EVENT_BUS.post(new TabRegisterEvent(CreativeTabs::register));
 		CreativeTabs.initTabs();
+		Utility.isMinecraftInitialized = true;
 	}
 
 	@Inject(method = "method_2103", at = @At("HEAD"), cancellable = true)

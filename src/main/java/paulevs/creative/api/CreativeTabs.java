@@ -3,14 +3,13 @@ package paulevs.creative.api;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.block.BlockBase;
+import net.minecraft.block.*;
 import net.minecraft.item.Block;
 import net.minecraft.item.ItemBase;
 import net.minecraft.item.ItemInstance;
 import net.minecraft.item.armour.Armour;
 import net.minecraft.item.food.FoodBase;
 import net.minecraft.item.tool.Hoe;
-import net.minecraft.item.tool.Shears;
 import net.minecraft.item.tool.Sword;
 import net.minecraft.item.tool.ToolBase;
 import paulevs.creative.Creative;
@@ -46,29 +45,37 @@ public class CreativeTabs {
 		SimpleTab tabFullBlocks = register(new SimpleTab("minecraft_full_blocks", Creative.MODID.toString(), BlockBase.STONE));
 		SimpleTab tabOtherBlocks = register(new SimpleTab("minecraft_other_blocks", Creative.MODID.toString(), BlockBase.LADDER));
 		SimpleTab tabTools = register(new SimpleTab("minecraft_tools", Creative.MODID.toString(), ItemBase.ironPickaxe));
-		SimpleTab tabWeapons = register(new SimpleTab("minecraft_weapons", Creative.MODID.toString(), ItemBase.ironSword));
+		SimpleTab tabWeaponry = register(new SimpleTab("minecraft_weapons", Creative.MODID.toString(), ItemBase.ironSword));
 		SimpleTab tabResources = register(new SimpleTab("minecraft_resources", Creative.MODID.toString(), ItemBase.ironIngot));
 		SimpleTab tabFood = register(new SimpleTab("minecraft_food", Creative.MODID.toString(), ItemBase.apple));
 		SimpleTab tabItems = register(new SimpleTab("minecraft_other_items", Creative.MODID.toString(), ItemBase.slimeball));
 		
 		Set<Integer> resources = Sets.newHashSet();
-		resources.add(ItemBase.coal.id);
-		resources.add(ItemBase.diamond.id);
-		resources.add(ItemBase.goldIngot.id);
-		resources.add(ItemBase.ironIngot.id);
+		resources.add(ItemBase.glowstoneDust.id);
 		resources.add(ItemBase.redstoneDust.id);
-		resources.add(ItemBase.string.id);
+		resources.add(ItemBase.goldIngot.id);
 		resources.add(ItemBase.gunpowder.id);
+		resources.add(ItemBase.ironIngot.id);
+		resources.add(ItemBase.slimeball.id);
+		resources.add(ItemBase.diamond.id);
+		resources.add(ItemBase.feather.id);
+		resources.add(ItemBase.string.id);
+		resources.add(ItemBase.brick.id);
+		resources.add(ItemBase.flint.id);
+		resources.add(ItemBase.paper.id);
 		resources.add(ItemBase.stick.id);
 		resources.add(ItemBase.bone.id);
-		resources.add(ItemBase.flint.id);
+		resources.add(ItemBase.clay.id);
+		resources.add(ItemBase.coal.id);
 		
 		for (int i = 0; i < 32000; i++) {
 			if (ItemBase.byId[i] != null) {
 				ItemBase item = ItemBase.byId[i];
 				tabAll.addItemWithVariants(item);
 				if (i < BlockBase.BY_ID.length && BlockBase.BY_ID[i] != null) {
-					if (BlockBase.BY_ID[i].isFullCube()) {
+					BlockBase block = BlockBase.BY_ID[i];
+
+					if (block.isFullCube()) {
 						tabFullBlocks.addItemWithVariants(item);
 					}
 					else {
@@ -76,15 +83,23 @@ public class CreativeTabs {
 					}
 				}
 				else if (item instanceof Block) {
-					tabOtherBlocks.addItemWithVariants(item);
+					if (item == ItemBase.cake) {
+						tabFood.addItemWithVariants(item);
+					}
+					else if (item == ItemBase.sugarCanes) {
+						tabFood.addItemWithVariants(item);
+					}
+					else {
+						tabOtherBlocks.addItemWithVariants(item);
+					}
 				}
-				else if (item instanceof ToolBase || item instanceof Hoe || item instanceof Shears) {
+				else if (isTool(item)) {
 					tabTools.addItemWithVariants(item);
 				}
-				else if (item instanceof Armour || item instanceof Sword) {
-					tabWeapons.addItemWithVariants(item);
+				else if (isWeaponry(item)) {
+					tabWeaponry.addItemWithVariants(item);
 				}
-				else if (item instanceof FoodBase) {
+				else if (isFood(item)) {
 					tabFood.addItemWithVariants(item);
 				}
 				else if (resources.contains(i)) {
@@ -96,15 +111,33 @@ public class CreativeTabs {
 			}
 		}
 	}
-	
+
+	private static boolean isTool(ItemBase item){
+		return item instanceof ToolBase ||
+				item instanceof Hoe ||
+				item == ItemBase.flintAndSteel ||
+				item == ItemBase.fishingRod ||
+				item == ItemBase.shears ||
+				item == ItemBase.clock;
+	}
+
+	private static boolean isWeaponry(ItemBase item) {
+		return item instanceof Armour || item instanceof Sword || item == ItemBase.bow || item == ItemBase.arrow;
+	}
+
+	private static boolean isFood(ItemBase item) {
+		return item instanceof FoodBase ||
+				item == ItemBase.seeds ||
+				item == ItemBase.sugar ||
+				item == ItemBase.wheat ||
+				item == ItemBase.bowl ||
+				item == ItemBase.egg;
+	}
+
 	public static void initTabs() {
 		for (int i = 0; i < TAB_ORDERED.size(); i++) {
 			int index = i / 7;
-			List<CreativeTab> list = TABS_RENDER.get(index);
-			if (list == null) {
-				list = Lists.newArrayList();
-				TABS_RENDER.put(index, list);
-			}
+			List<CreativeTab> list = TABS_RENDER.computeIfAbsent(index, k -> Lists.newArrayList());
 			list.add(TAB_ORDERED.get(i));
 		}
 	}

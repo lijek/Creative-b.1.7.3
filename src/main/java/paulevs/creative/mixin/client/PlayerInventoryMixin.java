@@ -292,7 +292,9 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
             return;
         }
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        String name = ("" + TranslationStorage.getInstance().method_995(item.getTranslationKey())).trim();
+        String key = item.getTranslationKey();
+        String name = TranslationStorage.getInstance().method_995(key);
+        name = (name.isEmpty() ? key : name);
         if(item.getType() instanceof CustomTooltipProvider){
             StationAPI.EVENT_BUS.post(
                     new TooltipRenderEvent(item, this, textManager, minecraft.player.inventory, containerX, containerY, (int) mouseX,

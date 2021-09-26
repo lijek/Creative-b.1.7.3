@@ -25,7 +25,8 @@
     "client.MinecraftMixin",
     "client.MultiPlayerClientInteractionManagerMixin",
     "client.PlayerInventoryMixin",
-    "client.SinglePlayerClientInteractionManagerMixin"
+    "client.SinglePlayerClientInteractionManagerMixin",
+    "client.GrassMixin"
   ],
   "injectors": {
     "defaultRequire": 1
