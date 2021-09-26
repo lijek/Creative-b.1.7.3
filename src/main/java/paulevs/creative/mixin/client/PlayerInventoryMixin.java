@@ -297,7 +297,7 @@ public abstract class PlayerInventoryMixin extends ContainerBase {
         name = (name.isEmpty() ? key : name);
         if(item.getType() instanceof CustomTooltipProvider){
             StationAPI.EVENT_BUS.post(
-                    new TooltipRenderEvent(item, this, textManager, minecraft.player.inventory, containerX, containerY, (int) mouseX,
+                    new TooltipRenderEvent(item, this, textManager, minecraft.player.inventory, 0, 0, (int) mouseX,
                                            (int) mouseY, delta, name));
         }else
             creative_renderString(name);
